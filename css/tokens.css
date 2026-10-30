@@ -1,0 +1,67 @@
+/*
+ * MONARCH — Design Tokens
+ * true-black-flat style, black-and-gold identity
+ * Follows tasteskill v2 app-screen rules:
+ *  - Colour only on data, not chrome
+ *  - Surfaces flat, separated by tone alone (no shadows)
+ *  - Accent (gold) under 5% of any screen
+ *  - Brand faces: Cormorant Garamond (display) + DM Mono (figures), with the system body stack
+ *  - Tabular figures via font-variant-numeric
+ */
+
+:root {
+  /* === Colour roles === */
+  --bg:          #0a0a0a;   /* ground: near-black — ~80% of screen */
+  --surface:     #141414;   /* cards: one tone step up */
+  --surface-2:   #1c1c1c;   /* nested context (modal, hover state) */
+  --ink:         #e4e1dd;   /* primary text: neutral off-white — passes contrast on #0a0a0a */
+  --muted:       #a7a39b;   /* secondary labels, units, captions — strong contrast on both surfaces */
+  --rule:        #222222;   /* hairline separators (1px only) */
+  --accent:      #c9a84c;   /* gold — data hue, primary action, crown mark */
+  --accent-ink:  #0a0a0a;   /* text on gold */
+  --positive:    #a7a39b;   /* neutral grey — good direction (up for wealth) */
+  --negative:    #c0392b;   /* red — bad direction */
+  --neg-bg:      #2a1010;   /* negative tint for status chips */
+  --pos-bg:      #1a1c10;   /* positive tint for status chips */
+
+  /* === Type scale (app screen: no hero display size) === */
+  --step-small: 0.8125rem;  /* 13px — captions, legal, muted labels */
+  --step-body:  0.9375rem;  /* 15px — table rows, card body */
+  --step-lead:  1rem;       /* 16px — card titles, nav labels */
+  --step-head:  1.5rem;     /* 24px — h1 page title */
+  --step-kpi:   2rem;       /* 32px — net-worth lead figure */
+
+  /* === Type families === */
+  --ff-display: 'Cormorant Garamond', Georgia, serif;
+  --ff-body:    system-ui, sans-serif;
+  --ff-data:    'DM Mono', monospace;
+
+  /* === Spacing === */
+  --sp-4:    4px;
+  --sp-8:    8px;
+  --sp-12:   12px;
+  --sp-16:   16px;
+  --sp-20:   20px;
+  --sp-24:   24px;
+  --sp-32:   32px;
+  --sp-48:   48px;
+
+  /* === Canvas === */
+  --sidebar-w:   224px;
+  --canvas-pad:  32px;
+  --gutter:      16px;
+  --radius-card: 0px;       /* flat corners — tasteskill: most strong screens 52% square */
+
+  /* === Motion (feedback only — no entrances on app screens) === */
+  --dur-fast:  120ms;
+  --dur-base:  200ms;
+  --ease-out:  cubic-bezier(0.2, 0, 0, 1);
+}
+
+/* Reduced-motion: keep content, drop travel */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    transition-duration: 0.01ms !important;
+    animation-duration:  0.01ms !important;
+  }
+}

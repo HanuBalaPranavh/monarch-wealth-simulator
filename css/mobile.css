@@ -1,0 +1,255 @@
+/*
+ * MONARCH — Mobile & Responsive Layout
+ * Breakpoints:
+ *   768px — tablet: sidebar folds, 2-col → 1-col grids
+ *   480px — phone:  single column throughout
+ */
+
+/* ─── Tablet (≤768px): sidebar folds, canvas full width ─── */
+@media (max-width: 768px) {
+  .app-shell {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto 1fr;
+  }
+
+  /* Sidebar becomes a slide-in drawer */
+  .sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: var(--sidebar-w);
+    height: 100dvh;
+    z-index: 40;
+    transform: translateX(-100%);
+    transition: transform var(--dur-base) var(--ease-out);
+    border-right: 1px solid var(--rule);
+  }
+
+  .sidebar.is-open {
+    transform: translateX(0);
+  }
+
+  .canvas {
+    grid-column: 1;
+    padding: var(--sp-16) var(--sp-16);
+    padding-top: var(--sp-20);
+  }
+
+  .mobile-topbar { display: flex; }
+  .mobile-menu-btn { display: flex; }
+
+  /* KPI strip: 2×2 grid */
+  .kpi-strip {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .kpi-cell:nth-child(2) { border-right: none; }
+  .kpi-cell:nth-child(3) { border-right: 1px solid var(--rule); border-top: 1px solid var(--rule); }
+  .kpi-cell:nth-child(4) { border-top: 1px solid var(--rule); border-right: none; }
+
+  /* Ring section: stacked */
+  .ring-section {
+    grid-template-columns: 1fr;
+    justify-items: center;
+  }
+
+  .ring-legend {
+    width: 100%;
+  }
+
+  .chart-card__header {
+    align-items: stretch;
+  }
+
+  .chart-periods {
+    width: 100%;
+    margin-left: 0;
+  }
+
+  /* Asset panel */
+  .asset-panel__header {
+    grid-template-columns: 1fr 100px 100px;
+  }
+
+  .asset-panel__header .asset-panel__col:nth-child(4),
+  .asset-panel__header .asset-panel__col:nth-child(5) {
+    display: none;
+  }
+
+  .asset-row {
+    grid-template-columns: 1fr 100px 100px;
+  }
+
+  .asset-row > *:nth-child(4),
+  .asset-row > *:nth-child(5) {
+    display: none;
+  }
+
+  /* Investment grid: 1 column */
+  .invest-grid {
+    grid-template-columns: 1fr;
+  }
+
+  /* Market grid: 1 column */
+  .market-grid {
+    grid-template-columns: 1fr;
+  }
+
+  /* TX list */
+  .tx-list__header {
+    grid-template-columns: 1fr 100px 90px;
+  }
+
+  .tx-list__header .tx-col:last-child { display: none; }
+
+  .tx-row {
+    grid-template-columns: 1fr 100px 90px;
+  }
+
+  .tx-row > *:last-child { display: none; }
+
+  /* Title row */
+  .title-row {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--sp-4);
+  }
+
+  /* Dialog */
+  .dialog {
+    padding: var(--sp-24);
+  }
+
+  .dialog__actions {
+    flex-direction: column-reverse;
+  }
+
+  .dialog__actions .btn {
+    width: 100%;
+    justify-content: center;
+  }
+}
+
+/* ─── Phone (≤480px) ─── */
+@media (max-width: 480px) {
+  :root {
+    --canvas-pad: 12px;
+    --step-kpi: 1.625rem;  /* scale down lead figure on tiny screens */
+  }
+
+  .canvas {
+    padding: var(--sp-12);
+    padding-top: var(--sp-16);
+  }
+
+  /* KPI strip: 2×2 stays, but compact */
+  .kpi-cell {
+    padding: var(--sp-16) var(--sp-16);
+  }
+
+  .kpi-cell--lead .kpi-value {
+    font-size: 1.625rem;
+  }
+
+  /* Full-width ring wrap */
+  .ring-wrap {
+    width: 150px;
+    height: 150px;
+  }
+
+  .chart-card {
+    padding: var(--sp-16);
+  }
+
+  .chart-periods {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    padding: 2px;
+  }
+
+  .chart-period {
+    min-width: 44px;
+    min-height: 44px;
+    flex: 1 0 44px;
+  }
+
+  .goal-target-select {
+    min-height: 44px;
+  }
+
+  /* Invest cards: narrower inputs */
+  .invest-card__controls {
+    flex-wrap: wrap;
+  }
+
+  .qty-input {
+    width: 60px;
+  }
+
+  /* Market grid: single narrow cards */
+  .market-grid {
+    grid-template-columns: 1fr;
+  }
+
+  /* TX: 2 cols */
+  .tx-list__header {
+    grid-template-columns: 1fr 90px;
+  }
+
+  .tx-list__header .tx-col:nth-child(2),
+  .tx-list__header .tx-col:nth-child(3) {
+    display: none;
+  }
+
+  .tx-row {
+    grid-template-columns: 1fr 90px;
+  }
+
+  .tx-row > *:nth-child(2),
+  .tx-row > *:nth-child(3) {
+    display: none;
+  }
+
+  /* Tab bar: smaller */
+  .tab-btn {
+    padding: var(--sp-10, 10px) var(--sp-12);
+    font-size: var(--step-small);
+  }
+
+  /* Asset panel: minimal */
+  .asset-panel__header {
+    grid-template-columns: 1fr 100px;
+  }
+
+  .asset-panel__header .asset-panel__col:nth-child(2),
+  .asset-panel__header .asset-panel__col:nth-child(3),
+  .asset-panel__header .asset-panel__col:nth-child(4),
+  .asset-panel__header .asset-panel__col:nth-child(5) {
+    display: none;
+  }
+
+  .asset-panel__header .asset-panel__col:nth-child(2) {
+    display: block;  /* keep Value */
+  }
+
+  .asset-row {
+    grid-template-columns: 1fr 100px;
+  }
+
+  .asset-row > *:nth-child(2),
+  .asset-row > *:nth-child(3),
+  .asset-row > *:nth-child(4),
+  .asset-row > *:nth-child(5) {
+    display: none;
+  }
+
+  .asset-row > *:nth-child(2) {
+    display: block; /* keep the current value under its matching header */
+  }
+
+  /* Toast: full width on mobile */
+  .toast-region {
+    margin-right: 0;
+    max-width: 100%;
+  }
+}

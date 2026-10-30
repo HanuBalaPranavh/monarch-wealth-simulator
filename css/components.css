@@ -1,0 +1,1119 @@
+/*
+ * MONARCH — Components
+ * KPIs, cards, charts, tables, marketplace, toasts, dialogs.
+ * All tasteskill app-screen rules enforced:
+ *  - KPIs: no icon tiles, no sparklines, bare text on surface
+ *  - Charts: no legend for single series, 3–5 gridlines, accent on data only
+ *  - Tables: no zebra, numbers right-aligned, tabular figures
+ *  - Buttons: flat, square-cornered, one fill
+ *  - No gradients anywhere
+ *  - Colour only on data and one primary action
+ */
+
+/* ─────────────────────────────────────────────
+   KPI STRIP
+   One container, hairline-divided columns.
+   tasteskill: "one container split by 1px hairlines" (6 of 23 screens)
+───────────────────────────────────────────── */
+.kpi-strip {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  border: 1px solid var(--rule);
+  background: var(--surface);
+  margin-bottom: var(--sp-32);
+}
+
+.kpi-cell {
+  padding: var(--sp-20) var(--sp-24);
+  border-right: 1px solid var(--rule);
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-4);
+}
+
+.kpi-cell:last-child { border-right: none; }
+
+.kpi-label {
+  font-size: var(--step-small);
+  color: var(--muted);
+  font-weight: 400;
+  white-space: nowrap;
+}
+
+.kpi-value {
+  font-family: var(--ff-data);
+  font-variant-numeric: tabular-nums;
+  font-weight: 400;
+  line-height: 1.1;
+  color: var(--ink);
+}
+
+/* Lead figure: net worth — 1.5× siblings (spec: 30–36px, ≥1.3× siblings) */
+.kpi-cell--lead .kpi-value {
+  font-size: var(--step-kpi);   /* 32px */
+  color: var(--accent);
+  font-weight: 600;
+}
+
+/* Sibling figures */
+.kpi-cell:not(.kpi-cell--lead) .kpi-value {
+  font-size: 1.375rem;  /* 22px — clearly smaller than 32px */
+}
+
+.kpi-delta {
+  font-size: 11px;
+  font-variant-numeric: tabular-nums;
+}
+
+.kpi-delta--positive { color: var(--muted); }   /* good direction = grey */
+.kpi-delta--negative { color: var(--negative); }
+.kpi-delta--zero     { color: var(--muted); }
+
+/* ─────────────────────────────────────────────
+   PORTFOLIO RING (Signature element)
+   SVG drawn in charts.js, displayed here.
+───────────────────────────────────────────── */
+.ring-section {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: var(--sp-32);
+  align-items: center;
+  background: var(--surface);
+  border: 1px solid var(--rule);
+  padding: var(--sp-24);
+  margin-bottom: var(--sp-32);
+}
+
+.ring-wrap {
+  position: relative;
+  width: 180px;
+  height: 180px;
+  flex-shrink: 0;
+}
+
+.ring-wrap svg {
+  width: 100%;
+  height: 100%;
+}
+
+.ring-centre {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+}
+
+.ring-centre__label {
+  font-size: var(--step-small);
+  color: var(--muted);
+  text-align: center;
+}
+
+.ring-centre__value {
+  font-family: var(--ff-data);
+  font-size: 1.125rem;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  color: var(--accent);
+  text-align: center;
+  line-height: 1.2;
+}
+
+.ring-legend {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-12);
+}
+
+.ring-legend__item {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-12);
+}
+
+.ring-legend__swatch {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.ring-legend__name {
+  font-size: var(--step-small);
+  color: var(--muted);
+  flex: 1;
+  min-width: 0;
+}
+
+.ring-legend__amount {
+  font-family: var(--ff-data);
+  font-size: var(--step-body);
+  font-variant-numeric: tabular-nums;
+  color: var(--ink);
+  text-align: right;
+}
+
+.ring-legend__pct {
+  font-family: var(--ff-data);
+  font-size: var(--step-small);
+  color: var(--muted);
+  width: 36px;
+  text-align: right;
+}
+
+/* ─────────────────────────────────────────────
+   PERFORMANCE CHART
+   Line chart card, accent hue on the data line.
+───────────────────────────────────────────── */
+.chart-card {
+  background: var(--surface);
+  border: 1px solid var(--rule);
+  padding: var(--sp-20) var(--sp-24);
+  margin-bottom: var(--sp-32);
+}
+
+.chart-card__header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--sp-16);
+  flex-wrap: wrap;
+  margin-bottom: var(--sp-16);
+}
+
+.chart-card__heading {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-4);
+  min-width: 0;
+}
+
+.chart-card__title {
+  font-size: var(--step-lead);
+  color: var(--ink);
+  font-weight: 600;
+}
+
+.chart-card__meta {
+  font-size: var(--step-small);
+  color: var(--muted);
+  line-height: 1.4;
+}
+
+.chart-periods {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sp-4);
+  margin-left: auto;
+}
+
+.chart-period {
+  min-width: 40px;
+  min-height: 36px;
+  padding: 0 var(--sp-8);
+  border: 1px solid var(--rule);
+  background: transparent;
+  color: var(--muted);
+  font-family: var(--ff-data);
+  font-size: 12px;
+  cursor: pointer;
+}
+
+.chart-period:hover,
+.chart-period.is-active {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+.chart-period:focus-visible,
+.goal-target-select:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+.chart-canvas {
+  width: 100%;
+  display: block;
+}
+
+.chart-empty-state {
+  min-height: 200px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--sp-16);
+  border: 1px dashed var(--rule);
+  color: var(--muted);
+  font-size: var(--step-small);
+  text-align: center;
+}
+
+.simulation-note {
+  margin: calc(var(--sp-16) * -1) 0 var(--sp-24);
+  color: var(--muted);
+  font-size: var(--step-small);
+}
+
+.overview-analysis-grid {
+  display: grid;
+  gap: 0 var(--gutter);
+}
+
+.overview-analysis-grid .ring-section,
+.overview-analysis-grid .chart-card {
+  margin-bottom: var(--sp-32);
+  min-width: 0;
+}
+
+.overview-support-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0 var(--gutter);
+  align-items: start;
+}
+
+.overview-panel {
+  min-width: 0;
+  margin-bottom: var(--sp-32);
+  padding: var(--sp-20) var(--sp-24);
+  background: var(--surface);
+  border: 1px solid var(--rule);
+}
+
+.activity-list {
+  border-top: 1px solid var(--rule);
+}
+
+.activity-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--sp-16);
+  padding: var(--sp-12) 0;
+  border-bottom: 1px solid var(--rule);
+}
+
+.activity-row:last-child { border-bottom: 0; }
+
+.activity-row__main {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.activity-row__name {
+  overflow: hidden;
+  color: var(--ink);
+  font-size: var(--step-body);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.activity-row__detail {
+  color: var(--muted);
+  font-size: 12px;
+}
+
+.activity-row__amount {
+  flex-shrink: 0;
+  color: var(--ink);
+  font-family: var(--ff-data);
+  font-size: var(--step-small);
+  font-variant-numeric: tabular-nums;
+  text-align: right;
+}
+
+.activity-row__amount--sell { color: var(--muted); }
+
+.activity-empty {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--sp-16);
+  padding: var(--sp-16) 0;
+  color: var(--muted);
+  font-size: var(--step-small);
+}
+
+.wealth-goal__header {
+  flex-wrap: wrap;
+}
+
+.goal-target-label {
+  margin-left: auto;
+  color: var(--muted);
+  font-size: var(--step-small);
+}
+
+.goal-target-select {
+  min-height: 36px;
+  padding: 0 var(--sp-8);
+  border: 1px solid var(--rule);
+  background: var(--surface-2);
+  color: var(--ink);
+  font-family: var(--ff-data);
+  font-size: var(--step-small);
+}
+
+.wealth-goal__copy {
+  min-height: 42px;
+  margin-bottom: var(--sp-12);
+  color: var(--ink);
+  font-size: var(--step-body);
+}
+
+.wealth-goal__track {
+  height: 8px;
+  overflow: hidden;
+  background: var(--surface-2);
+}
+
+.wealth-goal__fill {
+  width: 0;
+  height: 100%;
+  background: var(--accent);
+  transition: width var(--dur-base) var(--ease-out);
+}
+
+.wealth-goal__figures {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--sp-16);
+  margin-top: var(--sp-16);
+}
+
+.wealth-goal__figures > div {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-4);
+  min-width: 0;
+}
+
+.wealth-goal__figures > div:last-child { text-align: right; }
+
+.wealth-goal__figures span {
+  color: var(--muted);
+  font-size: 12px;
+}
+
+.wealth-goal__figures strong {
+  color: var(--ink);
+  font-family: var(--ff-data);
+  font-size: var(--step-small);
+  font-weight: 400;
+  font-variant-numeric: tabular-nums;
+}
+
+.event-card__label {
+  margin-bottom: var(--sp-8);
+  color: var(--muted);
+  font-size: 11px;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+}
+
+@media (min-width: 1000px) {
+  .overview-support-grid {
+    grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr);
+  }
+}
+
+@media (min-width: 1280px) {
+  .overview-analysis-grid {
+    grid-template-columns: minmax(360px, 0.8fr) minmax(480px, 1.2fr);
+  }
+
+  .overview-analysis-grid .ring-section,
+  .overview-analysis-grid .chart-card {
+    margin-bottom: var(--sp-32);
+  }
+}
+
+/* ─────────────────────────────────────────────
+   ASSET PANEL
+   Table-like list: 4 asset classes.
+   No zebra, numbers right-aligned, tabular-nums.
+───────────────────────────────────────────── */
+.asset-panel {
+  background: var(--surface);
+  border: 1px solid var(--rule);
+  margin-bottom: var(--sp-32);
+}
+
+.asset-panel__header {
+  display: grid;
+  grid-template-columns: 1fr 120px 120px 100px 80px;
+  padding: var(--sp-12) var(--sp-24);
+  border-bottom: 1px solid var(--rule);
+  gap: var(--sp-16);
+}
+
+.asset-panel__col {
+  font-size: var(--step-small);
+  color: var(--muted);
+  font-weight: 400;
+}
+
+.asset-panel__col--num {
+  text-align: right;
+}
+
+.asset-row {
+  display: grid;
+  grid-template-columns: 1fr 120px 120px 100px 80px;
+  padding: var(--sp-16) var(--sp-24);
+  border-bottom: 1px solid var(--rule);
+  gap: var(--sp-16);
+  align-items: center;
+  transition: background var(--dur-fast);
+}
+
+.asset-row:last-child { border-bottom: none; }
+.asset-row:hover { background: var(--surface-2); }
+
+.asset-row__name {
+  font-size: var(--step-lead);
+  color: var(--ink);
+  display: flex;
+  align-items: center;
+  gap: var(--sp-8);
+}
+
+.asset-row__sub {
+  font-size: var(--step-small);
+  color: var(--muted);
+  display: block;
+  margin-top: 2px;
+}
+
+.asset-row__value {
+  font-family: var(--ff-data);
+  font-size: var(--step-body);
+  font-variant-numeric: tabular-nums;
+  color: var(--ink);
+  text-align: right;
+}
+
+.asset-row__delta {
+  font-family: var(--ff-data);
+  font-size: var(--step-small);
+  font-variant-numeric: tabular-nums;
+  text-align: right;
+}
+
+.asset-row__delta--positive { color: var(--muted); }
+.asset-row__delta--negative { color: var(--negative); }
+
+.asset-row__action {
+  text-align: right;
+}
+
+/* ─────────────────────────────────────────────
+   INVESTMENT CARDS
+   Flat cards, one primary action each.
+───────────────────────────────────────────── */
+.invest-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--gutter);
+  margin-bottom: var(--sp-32);
+}
+
+.invest-card {
+  background: var(--surface);
+  border: 1px solid var(--rule);
+  padding: var(--sp-20) var(--sp-20);
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-12);
+}
+
+.invest-card__name {
+  font-size: var(--step-lead);
+  color: var(--ink);
+  font-weight: 600;
+}
+
+.invest-card__price {
+  font-family: var(--ff-data);
+  font-size: 1.5rem;
+  font-variant-numeric: tabular-nums;
+  color: var(--ink);
+  font-weight: 600;
+}
+
+.invest-card__sub {
+  font-size: var(--step-small);
+  color: var(--muted);
+}
+
+.invest-card__change {
+  font-family: var(--ff-data);
+  font-size: var(--step-small);
+  font-variant-numeric: tabular-nums;
+}
+
+.invest-card__change--positive { color: var(--muted); }
+.invest-card__change--negative { color: var(--negative); }
+
+.invest-card__controls {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-8);
+  margin-top: var(--sp-4);
+}
+
+.qty-input {
+  width: 72px;
+  height: 34px;
+  background: var(--surface-2);
+  border: 1px solid var(--rule);
+  color: var(--ink);
+  font-family: var(--ff-data);
+  font-size: var(--step-body);
+  font-variant-numeric: tabular-nums;
+  text-align: center;
+  padding: 0 var(--sp-8);
+  appearance: none;
+  -moz-appearance: textfield;
+}
+
+.qty-input::-webkit-inner-spin-button,
+.qty-input::-webkit-outer-spin-button { display: none; }
+
+.qty-input:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 1px;
+}
+
+/* ─────────────────────────────────────────────
+   BUTTONS
+   Flat, square-cornered.
+   Primary: accent gold (one primary per section)
+   Ghost: outline in rule colour
+───────────────────────────────────────────── */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--sp-8);
+  height: 34px;
+  padding: 0 var(--sp-16);
+  font-family: var(--ff-body);
+  font-size: var(--step-small);
+  font-weight: 500;
+  cursor: pointer;
+  border: none;
+  white-space: nowrap;
+  transition: background var(--dur-fast) var(--ease-out),
+              color var(--dur-fast) var(--ease-out),
+              border-color var(--dur-fast) var(--ease-out);
+  text-decoration: none;
+}
+
+.btn:disabled {
+  opacity: 0.38;
+  cursor: not-allowed;
+}
+
+/* Primary — accent gold */
+.btn--primary {
+  background: var(--accent);
+  color: var(--accent-ink);
+}
+
+.btn--primary:hover:not(:disabled) {
+  background: #d4b45a;
+}
+
+.btn--primary:active:not(:disabled) {
+  background: #b8973f;
+}
+
+/* Ghost — outline */
+.btn--ghost {
+  background: transparent;
+  color: var(--ink);
+  border: 1px solid var(--rule);
+}
+
+.btn--ghost:hover:not(:disabled) {
+  border-color: var(--muted);
+  background: var(--surface-2);
+}
+
+/* Danger */
+.btn--danger {
+  background: var(--negative);
+  color: #fff;
+}
+
+.btn--danger:hover:not(:disabled) {
+  background: #a93226;
+}
+
+/* Sell — muted */
+.btn--sell {
+  background: var(--surface-2);
+  color: var(--ink);
+  border: 1px solid var(--rule);
+}
+
+.btn--sell:hover:not(:disabled) {
+  border-color: var(--negative);
+  color: var(--negative);
+}
+
+/* Small variant */
+.btn--sm {
+  height: 28px;
+  padding: 0 var(--sp-12);
+  font-size: 11px;
+}
+
+/* ─────────────────────────────────────────────
+   MARKET EVENTS
+   One event card per day.
+───────────────────────────────────────────── */
+.event-card {
+  background: var(--surface);
+  border: 1px solid var(--rule);
+  border-left: 3px solid var(--accent);
+  padding: var(--sp-20) var(--sp-24);
+  margin-bottom: var(--sp-32);
+}
+
+.event-card--negative {
+  border-left-color: var(--negative);
+}
+
+.event-card__date {
+  font-size: var(--step-small);
+  color: var(--muted);
+  margin-bottom: var(--sp-4);
+}
+
+.event-card__headline {
+  font-family: var(--ff-display);
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: var(--ink);
+  margin-bottom: var(--sp-4);
+}
+
+.event-card__desc {
+  font-size: var(--step-body);
+  color: var(--muted);
+  line-height: 1.5;
+}
+
+.event-card__impact {
+  font-family: var(--ff-data);
+  margin-top: var(--sp-8);
+  font-size: var(--step-small);
+  font-variant-numeric: tabular-nums;
+}
+
+.event-card__impact--positive { color: var(--muted); }
+.event-card__impact--negative { color: var(--negative); }
+
+/* ─────────────────────────────────────────────
+   LUXURY MARKETPLACE
+   Horizontal list of cards.
+───────────────────────────────────────────── */
+.market-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--gutter);
+  margin-bottom: var(--sp-32);
+}
+
+.market-card {
+  background: var(--surface);
+  border: 1px solid var(--rule);
+  padding: var(--sp-20);
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-8);
+}
+
+.market-card__category {
+  font-size: var(--step-small);
+  color: var(--muted);
+}
+
+.market-card__name {
+  font-family: var(--ff-display);
+  font-size: 1.0625rem;
+  font-weight: 600;
+  color: var(--ink);
+  line-height: 1.2;
+}
+
+.market-card__price {
+  font-family: var(--ff-data);
+  font-size: var(--step-lead);
+  font-variant-numeric: tabular-nums;
+  color: var(--accent);
+  font-weight: 600;
+}
+
+.market-card__desc {
+  font-size: var(--step-small);
+  color: var(--muted);
+  line-height: 1.5;
+  flex: 1;
+}
+
+.market-card__footer {
+  margin-top: var(--sp-4);
+}
+
+/* Owned badge */
+.badge-owned {
+  display: inline-block;
+  font-size: 11px;
+  color: var(--accent);
+  border: 1px solid var(--accent);
+  padding: 2px 8px;
+  letter-spacing: 0.03em;
+}
+
+/* ─────────────────────────────────────────────
+   TRANSACTION HISTORY
+   Compact table list.
+───────────────────────────────────────────── */
+.tx-list {
+  background: var(--surface);
+  border: 1px solid var(--rule);
+  margin-bottom: var(--sp-32);
+}
+
+.tx-list__header {
+  display: grid;
+  grid-template-columns: 1fr 100px 120px 80px;
+  padding: var(--sp-10, 10px) var(--sp-24);
+  border-bottom: 1px solid var(--rule);
+  gap: var(--sp-16);
+}
+
+.tx-col {
+  font-size: var(--step-small);
+  color: var(--muted);
+  font-weight: 400;
+}
+
+.tx-col--num { text-align: right; }
+
+.tx-row {
+  display: grid;
+  grid-template-columns: 1fr 100px 120px 80px;
+  padding: var(--sp-14, 14px) var(--sp-24);
+  border-bottom: 1px solid var(--rule);
+  gap: var(--sp-16);
+  align-items: center;
+}
+
+.tx-row:last-child { border-bottom: none; }
+.tx-row:hover { background: var(--surface-2); }
+
+.tx-row__asset {
+  font-size: var(--step-body);
+  color: var(--ink);
+}
+
+.tx-row__type {
+  font-size: var(--step-small);
+  color: var(--muted);
+  display: block;
+  margin-top: 2px;
+}
+
+.tx-row__date {
+  font-size: var(--step-small);
+  font-variant-numeric: tabular-nums;
+  color: var(--muted);
+  text-align: right;
+}
+
+.tx-row__amount {
+  font-family: var(--ff-data);
+  font-size: var(--step-body);
+  font-variant-numeric: tabular-nums;
+  color: var(--ink);
+  text-align: right;
+}
+
+.tx-row__amount--buy  { color: var(--negative); }
+.tx-row__amount--sell { color: var(--muted); }
+.tx-row__amount--buy-luxury { color: var(--negative); }
+
+.tx-row__status {
+  font-size: 11px;
+  text-align: right;
+  color: var(--muted);
+}
+
+/* ─────────────────────────────────────────────
+   TOAST NOTIFICATIONS
+   Feedback after every action.
+───────────────────────────────────────────── */
+.toast-region {
+  position: static;
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-8);
+  max-width: 360px;
+  margin: 0 0 var(--sp-16) auto;
+  pointer-events: none;
+}
+
+.toast {
+  background: var(--surface-2);
+  border: 1px solid var(--rule);
+  border-left: 3px solid var(--accent);
+  padding: var(--sp-12) var(--sp-16);
+  pointer-events: auto;
+  opacity: 1;
+  transform: translateY(0);
+  transition: opacity var(--dur-base) var(--ease-out),
+              transform var(--dur-base) var(--ease-out);
+}
+
+.toast--error {
+  border-left-color: var(--negative);
+}
+
+.toast--exit {
+  opacity: 0;
+  transform: translateY(8px);
+}
+
+.toast__title {
+  font-size: var(--step-body);
+  color: var(--ink);
+  font-weight: 500;
+  margin-bottom: 2px;
+}
+
+.toast__desc {
+  font-size: var(--step-small);
+  color: var(--muted);
+  line-height: 1.4;
+}
+
+/* ─────────────────────────────────────────────
+   RESET CONFIRMATION DIALOG
+───────────────────────────────────────────── */
+.dialog-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.75);
+  z-index: 200;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--sp-16);
+  opacity: 0;
+  pointer-events: none;
+  visibility: hidden;
+  transition: opacity var(--dur-base) var(--ease-out),
+              visibility 0s var(--dur-base);
+}
+
+.dialog-overlay.is-open {
+  opacity: 1;
+  pointer-events: auto;
+  visibility: visible;
+  transition: opacity var(--dur-base) var(--ease-out),
+              visibility 0s 0s;
+}
+
+.dialog {
+  background: var(--surface);
+  border: 1px solid var(--rule);
+  max-width: 440px;
+  width: 100%;
+  padding: var(--sp-32);
+  transform: translateY(12px);
+  transition: transform var(--dur-base) var(--ease-out);
+}
+
+.dialog-overlay.is-open .dialog {
+  transform: translateY(0);
+}
+
+.dialog__title {
+  font-family: var(--ff-display);
+  font-size: 1.375rem;
+  font-weight: 600;
+  color: var(--ink);
+  margin-bottom: var(--sp-12);
+}
+
+.dialog__body {
+  font-size: var(--step-body);
+  color: var(--muted);
+  line-height: 1.6;
+  margin-bottom: var(--sp-24);
+}
+
+.dialog__body strong {
+  color: var(--ink);
+  font-weight: 500;
+}
+
+.dialog__actions {
+  display: flex;
+  gap: var(--sp-12);
+  justify-content: flex-end;
+}
+
+/* ─────────────────────────────────────────────
+   OWNED ASSETS DETAIL
+   Shows per-asset holdings inside invest cards.
+───────────────────────────────────────────── */
+.holding-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--sp-8) 0;
+  border-top: 1px solid var(--rule);
+  font-size: var(--step-small);
+}
+
+.holding-row__label { color: var(--muted); }
+
+.holding-row__value {
+  font-family: var(--ff-data);
+  font-variant-numeric: tabular-nums;
+  color: var(--ink);
+}
+
+/* ─────────────────────────────────────────────
+   UTILITY: DIVIDERS, EMPTY STATES
+───────────────────────────────────────────── */
+.empty-state {
+  padding: var(--sp-32) var(--sp-24);
+  text-align: center;
+  color: var(--muted);
+  font-size: var(--step-body);
+}
+
+/* ─────────────────────────────────────────────
+   SECTION TAB NAV (Portfolio / Marketplace / etc)
+───────────────────────────────────────────── */
+.tab-bar {
+  display: flex;
+  gap: 0;
+  border-bottom: 1px solid var(--rule);
+  margin-bottom: var(--sp-32);
+}
+
+.tab-btn {
+  background: none;
+  border: none;
+  border-bottom: 2px solid transparent;
+  color: var(--muted);
+  font-family: var(--ff-body);
+  font-size: var(--step-lead);
+  cursor: pointer;
+  padding: var(--sp-12) var(--sp-20);
+  margin-bottom: -1px;
+  transition: color var(--dur-fast), border-color var(--dur-fast);
+}
+
+.tab-btn:hover { color: var(--ink); }
+
+.tab-btn.is-active {
+  color: var(--ink);
+  border-bottom-color: var(--accent);
+}
+
+/* ─────────────────────────────────────────────
+   SCREEN PANELS (tab-driven views)
+───────────────────────────────────────────── */
+.screen { display: none; }
+.screen.is-active { display: block; }
+
+/* ─────────────────────────────────────────────
+   SELL PANEL (inside invest card)
+───────────────────────────────────────────── */
+.sell-controls {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-8);
+  margin-top: var(--sp-8);
+}
+
+/* ─────────────────────────────────────────────
+   MARKET EVENT HISTORY LIST (compact)
+───────────────────────────────────────────── */
+.event-history-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  background: var(--surface);
+  border: 1px solid var(--rule);
+}
+
+.event-history-row {
+  display: grid;
+  grid-template-columns: 1fr 120px;
+  padding: var(--sp-12) var(--sp-20);
+  border-bottom: 1px solid var(--rule);
+  gap: var(--sp-16);
+  align-items: start;
+}
+
+.event-history-row:last-child { border-bottom: none; }
+
+.event-history__title {
+  font-size: var(--step-body);
+  color: var(--ink);
+}
+
+.event-history__desc {
+  font-size: var(--step-small);
+  color: var(--muted);
+  margin-top: 2px;
+}
+
+.event-history__impact {
+  font-family: var(--ff-data);
+  font-size: var(--step-small);
+  font-variant-numeric: tabular-nums;
+  text-align: right;
+}
+
+/* ─────────────────────────────────────────────
+   WEALTH MILESTONE BANNER
+───────────────────────────────────────────── */
+.milestone-banner {
+  background: var(--surface);
+  border: 1px solid var(--accent);
+  padding: var(--sp-16) var(--sp-24);
+  margin-bottom: var(--sp-24);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--sp-16);
+}
+
+.milestone-banner__text {
+  font-family: var(--ff-display);
+  font-size: 1.0625rem;
+  font-weight: 600;
+  color: var(--accent);
+}
+
+.milestone-banner__sub {
+  font-size: var(--step-small);
+  color: var(--muted);
+  margin-top: 2px;
+}

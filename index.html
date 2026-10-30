@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MONARCH — Wealth Simulator</title>
+  <meta name="description" content="MONARCH: A premium financial strategy simulator. Manage ₹10 crore starting capital across stocks, real estate, gold, and business investments.">
+
+  <!-- Brand fonts: Cormorant Garamond for headings, DM Mono for figures -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600&family=DM+Mono:wght@400;500&display=swap">
+
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="css/tokens.css">
+  <link rel="stylesheet" href="css/shell.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/mobile.css">
+
+  <!-- Favicon via inline SVG -->
+  <link rel="icon" type="image/svg+xml" href="assets/monarch-mark.svg">
+</head>
+<body>
+
+  <!-- ── Mobile top bar (visible ≤768px) ── -->
+  <header class="mobile-topbar" role="banner">
+    <div class="mobile-brand">
+      <img src="assets/monarch-mark.svg" class="mobile-brand__mark" alt="" aria-hidden="true" width="22" height="22">
+      <span class="mobile-brand__name">MONARCH</span>
+    </div>
+    <button class="mobile-menu-btn" id="mobile-menu-btn" aria-label="Open navigation menu" aria-expanded="false">
+      <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5">
+        <line x1="2" y1="5" x2="18" y2="5"/>
+        <line x1="2" y1="10" x2="18" y2="10"/>
+        <line x1="2" y1="15" x2="18" y2="15"/>
+      </svg>
+    </button>
+  </header>
+
+  <!-- Sidebar overlay for mobile -->
+  <div class="sidebar-overlay" id="sidebar-overlay" role="presentation" aria-hidden="true"></div>
+
+  <!-- ── App shell ── -->
+  <div class="app-shell">
+
+    <!-- ── Sidebar ── -->
+    <aside class="sidebar" role="navigation" aria-label="Main navigation">
+
+      <!-- Brand mark -->
+      <div class="sidebar__brand">
+        <img src="assets/monarch-mark.svg" class="sidebar__mark" alt="MONARCH crown" width="28" height="28">
+        <span class="sidebar__name">MONARCH</span>
+      </div>
+
+      <!-- Nav -->
+      <nav class="sidebar__nav">
+        <div class="nav-group">
+          <span class="nav-group__label">Portfolio</span>
+          <button class="nav-item is-active" data-screen="overview" aria-current="page">
+            <svg class="nav-item__icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+              <rect x="1" y="1" width="6" height="6" rx="1"/>
+              <rect x="9" y="1" width="6" height="6" rx="1"/>
+              <rect x="1" y="9" width="6" height="6" rx="1"/>
+              <rect x="9" y="9" width="6" height="6" rx="1"/>
+            </svg>
+            Overview
+          </button>
+          <button class="nav-item" data-screen="investments">
+            <svg class="nav-item__icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+              <polyline points="1,12 5,7 9,9 15,3"/>
+              <polyline points="11,3 15,3 15,7"/>
+            </svg>
+            Investments
+          </button>
+        </div>
+
+        <div class="nav-group">
+          <span class="nav-group__label">Lifestyle</span>
+          <button class="nav-item" data-screen="marketplace">
+            <svg class="nav-item__icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+              <path d="M2 4h12l-1.5 7H3.5L2 4z"/>
+              <circle cx="6" cy="14" r="1"/>
+              <circle cx="11" cy="14" r="1"/>
+            </svg>
+            Marketplace
+          </button>
+        </div>
+
+        <div class="nav-group">
+          <span class="nav-group__label">Records</span>
+          <button class="nav-item" data-screen="history">
+            <svg class="nav-item__icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+              <rect x="2" y="2" width="12" height="12" rx="1"/>
+              <line x1="5" y1="6" x2="11" y2="6"/>
+              <line x1="5" y1="9" x2="11" y2="9"/>
+              <line x1="5" y1="12" x2="8" y2="12"/>
+            </svg>
+            History
+          </button>
+        </div>
+      </nav>
+
+      <!-- Footer: user + reset -->
+      <div class="sidebar__footer">
+        <div class="sidebar__avatar" aria-hidden="true">M</div>
+        <div class="sidebar__user-info">
+          <div class="sidebar__user-name">Investor</div>
+          <div class="sidebar__user-label">Virtual Portfolio</div>
+        </div>
+        <button
+          id="btn-reset"
+          class="btn btn--ghost btn--sm"
+          aria-label="Reset simulation"
+          title="Reset simulation"
+          style="flex-shrink:0;padding:0 8px;"
+        >
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+            <path d="M1 7a6 6 0 1 0 6-6 6 6 0 0 0-4.24 1.76"/>
+            <polyline points="1,1 1,4 4,4"/>
+          </svg>
+        </button>
+      </div>
+    </aside>
+
+    <!-- ── Canvas ── -->
+    <main class="canvas" role="main" id="main-content">
+
+      <!-- Page title row -->
+      <div class="title-row">
+        <h1 class="page-title">Portfolio Overview</h1>
+        <span class="title-meta" id="timestamp">—</span>
+      </div>
+
+      <!-- Notifications stay in document flow so they never cover dashboard content. -->
+      <div class="toast-region" id="toast-region" aria-live="polite" aria-label="Notifications"></div>
+
+      <!-- KPI Strip — always visible across all screens -->
+      <div class="kpi-strip" role="region" aria-label="Key financial figures">
+        <div class="kpi-cell kpi-cell--lead">
+          <span class="kpi-label">Net Worth</span>
+          <span class="kpi-value" id="kpi-networth" aria-live="polite">₹10.00 Cr</span>
+        </div>
+        <div class="kpi-cell">
+          <span class="kpi-label">Available Cash</span>
+          <span class="kpi-value" id="kpi-cash" aria-live="polite">₹10.00 Cr</span>
+        </div>
+        <div class="kpi-cell">
+          <span class="kpi-label">Invested</span>
+          <span class="kpi-value" id="kpi-invested" aria-live="polite">₹0</span>
+        </div>
+        <div class="kpi-cell">
+          <span class="kpi-label">Unrealised P&amp;L</span>
+          <span class="kpi-value kpi-delta--zero" id="kpi-pnl" aria-live="polite">₹0</span>
+        </div>
+      </div>
+
+      <p class="simulation-note" role="note">All prices and market events are simulated. MONARCH does not show live market quotes.</p>
+
+      <!-- ═══════════════════════════════════════
+           SCREEN: OVERVIEW
+      ═══════════════════════════════════════ -->
+      <div class="screen is-active" id="screen-overview" role="region" aria-label="Portfolio overview">
+
+        <div class="overview-analysis-grid">
+        <!-- Portfolio ring + legend -->
+        <section class="ring-section" aria-label="Portfolio allocation">
+          <div class="ring-wrap">
+            <div id="ring-svg"></div>
+            <div class="ring-centre" aria-hidden="true">
+              <span class="ring-centre__label">Net Worth</span>
+              <span class="ring-centre__value" id="ring-centre-value">—</span>
+            </div>
+          </div>
+          <div class="ring-legend" id="ring-legend" role="list" aria-label="Asset allocation breakdown">
+            <!-- rendered by JS -->
+          </div>
+        </section>
+
+        <!-- Performance chart -->
+        <section class="chart-card" aria-label="Portfolio performance chart">
+          <div class="chart-card__header">
+            <div class="chart-card__heading">
+              <h2 class="chart-card__title">Net Worth Over Time</h2>
+              <span class="chart-card__meta" id="chart-meta">Recorded simulation history</span>
+            </div>
+            <div class="chart-periods" id="chart-periods" role="group" aria-label="Net worth chart period"></div>
+          </div>
+          <div id="perf-chart" class="chart-canvas" aria-label="Simulated net worth history"></div>
+        </section>
+        </div>
+
+        <!-- Today's market event -->
+        <section aria-label="Today's market event">
+          <div class="section-head">
+            <h2 class="section-title">Market Insights</h2>
+          </div>
+          <div id="today-event">
+            <!-- rendered by JS -->
+          </div>
+        </section>
+
+        <div class="overview-support-grid">
+          <section class="overview-panel" aria-labelledby="recent-activity-title">
+            <div class="section-head">
+              <h2 class="section-title" id="recent-activity-title">Recent Activity</h2>
+              <button class="section-action" type="button" onclick="App._goToHistory()">View all</button>
+            </div>
+            <div class="activity-list" id="recent-transactions" aria-live="polite"></div>
+          </section>
+
+          <section class="overview-panel wealth-goal" aria-labelledby="wealth-goal-title">
+            <div class="section-head wealth-goal__header">
+              <h2 class="section-title" id="wealth-goal-title">Wealth Goal</h2>
+              <label class="goal-target-label" for="goal-target">Target</label>
+              <select class="goal-target-select" id="goal-target" aria-label="Choose wealth goal target"></select>
+            </div>
+            <p class="wealth-goal__copy" id="goal-progress-label"></p>
+            <div class="wealth-goal__track" id="goal-progress" role="progressbar" aria-labelledby="wealth-goal-title"
+                 aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
+              <div class="wealth-goal__fill" id="goal-progress-fill"></div>
+            </div>
+            <div class="wealth-goal__figures">
+              <div><span>Current net worth</span><strong id="goal-current"></strong></div>
+              <div><span id="goal-remaining-label">Remaining</span><strong id="goal-remaining"></strong></div>
+            </div>
+          </section>
+        </div>
+
+        <!-- Asset allocation table -->
+        <section aria-label="Asset allocation by category">
+          <div class="section-head">
+            <h2 class="section-title">Holdings by Asset Class</h2>
+            <button class="section-action" data-screen="investments" onclick="App._goToInvest('stocks')">
+              Invest →
+            </button>
+          </div>
+          <div class="asset-panel" role="table" aria-label="Asset allocation table">
+            <div class="asset-panel__header" role="row">
+              <div class="asset-panel__col" role="columnheader">Asset Class</div>
+              <div class="asset-panel__col asset-panel__col--num" role="columnheader">Current Value</div>
+              <div class="asset-panel__col asset-panel__col--num" role="columnheader">Cost Basis</div>
+              <div class="asset-panel__col asset-panel__col--num" role="columnheader">P&amp;L</div>
+              <div class="asset-panel__col" role="columnheader"></div>
+            </div>
+            <div id="asset-rows" role="rowgroup">
+              <!-- rendered by JS -->
+            </div>
+          </div>
+        </section>
+
+      </div><!-- /screen-overview -->
+
+
+      <!-- ═══════════════════════════════════════
+           SCREEN: INVESTMENTS
+      ═══════════════════════════════════════ -->
+      <div class="screen" id="screen-investments" role="region" aria-label="Investment options">
+        <div id="invest-cards">
+          <!-- rendered by JS -->
+        </div>
+      </div>
+
+
+      <!-- ═══════════════════════════════════════
+           SCREEN: MARKETPLACE
+      ═══════════════════════════════════════ -->
+      <div class="screen" id="screen-marketplace" role="region" aria-label="Luxury marketplace">
+        <section>
+          <div class="section-head">
+            <h2 class="section-title">Luxury Marketplace</h2>
+            <span class="section-action" style="cursor:default">Purchase from available cash</span>
+          </div>
+          <div id="market-cards">
+            <!-- rendered by JS -->
+          </div>
+        </section>
+      </div>
+
+
+      <!-- ═══════════════════════════════════════
+           SCREEN: HISTORY
+      ═══════════════════════════════════════ -->
+      <div class="screen" id="screen-history" role="region" aria-label="Transaction and event history">
+
+        <!-- Transaction history -->
+        <section>
+          <div class="section-head">
+            <h2 class="section-title">Transaction History</h2>
+          </div>
+          <div class="tx-list" role="table" aria-label="Transaction history">
+            <div class="tx-list__header" role="row">
+              <div class="tx-col" role="columnheader">Asset</div>
+              <div class="tx-col tx-col--num" role="columnheader">Date</div>
+              <div class="tx-col tx-col--num" role="columnheader">Amount</div>
+              <div class="tx-col tx-col--num" role="columnheader">Type</div>
+            </div>
+            <div id="tx-rows" role="rowgroup">
+              <div class="empty-state">No transactions yet.</div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Market event log -->
+        <section>
+          <div class="section-head" style="margin-top:var(--sp-48)">
+            <h2 class="section-title">Market Event Log</h2>
+          </div>
+          <div id="event-history-rows" class="event-history-list">
+            <!-- rendered by JS -->
+          </div>
+        </section>
+
+      </div><!-- /screen-history -->
+
+    </main><!-- /canvas -->
+  </div><!-- /app-shell -->
+
+  <!-- ── Toast region ── -->
+  <!-- ── Reset Confirmation Dialog ── -->
+  <div
+    class="dialog-overlay"
+    id="reset-dialog"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="dialog-title"
+    aria-describedby="dialog-desc"
+  >
+    <div class="dialog">
+      <h2 class="dialog__title" id="dialog-title">Reset Simulation</h2>
+      <div class="dialog__body" id="dialog-desc">
+        <p>Resetting will <strong>erase all current simulation progress</strong> — your investments, transactions, marketplace acquisitions, and market event history will be permanently deleted.</p>
+        <p style="margin-top:12px">Your starting balance of <strong>₹10 crore</strong> will be restored and the simulation will begin fresh.</p>
+      </div>
+      <div class="dialog__actions">
+        <button class="btn btn--ghost" id="dialog-cancel">Cancel</button>
+        <button class="btn btn--danger" id="dialog-confirm">Reset Simulation</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Scripts (in dependency order) ── -->
+  <script src="js/data.js"></script>
+  <script src="js/engine.js"></script>
+  <script src="js/charts.js"></script>
+  <script src="js/app.js"></script>
+
+</body>
+</html>
